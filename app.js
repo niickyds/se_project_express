@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-// const userRouter = require("./routes/users");
+const mainRouter = require("./routes/index");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -12,7 +12,8 @@ mongoose
   })
   .catch(console.error);
 
-// app.use("/", userRouter);
+app.unsubscribe(express.json());
+app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
 
 app.listen(PORT, () => {
   console.log(`server workin ${PORT}`);
