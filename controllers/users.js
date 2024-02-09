@@ -12,7 +12,7 @@ const getUsers = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, avatar } = req.body; // figure out what this does (part 5 first half)
+  const { name, avatar } = req.body; // has the info that's sent in body of req
 
   User.create({ name, avatar })
     .then((user) => res.status(201).send(user))

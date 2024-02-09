@@ -12,7 +12,7 @@ mongoose
   })
   .catch(console.error);
 
-app.unsubscribe(express.json());
+app.use(express.json());
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
 
 app.listen(PORT, () => {
