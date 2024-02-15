@@ -31,17 +31,19 @@ const createUser = (req, res) => {
 // get user by id
 
 const getUser = (res, req) => {
-  const { userId } = req.params; // userId is loaded in params; not body (/routes/users)
+  // const { userId } = req.params; // userId is loaded in params; not body (/routes/users)
 
-  User.findById(userId)
+  User.findById(req.user._id)
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
+        return res
+          .status(404)
+          .send({ message: "Cannot find item with that id" });
       } else if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(400).send({ message: "Bad request" });
       }
       return res.status(500).send({ message: err.message });
     });

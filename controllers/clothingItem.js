@@ -1,15 +1,11 @@
 const ClothingItem = require("../models/clothingItem");
 
 const createItem = (res, req) => {
-  console.log(req);
-  console.log(req.body);
-
   const userId = req.user._id;
   const { name, weather, imageURL } = req.body;
 
   ClothingItem.create({ name, weather, imageURL, owner: userId })
     .then((item) => {
-      console.log(item);
       res.send({ data: item });
     })
     .catch((err) => {
@@ -39,7 +35,7 @@ const updateItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  const { itemId } = req.params;
+  const { itemId } = req.params._id;
 
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
@@ -56,7 +52,7 @@ const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     itemId,
     {
-      $addToSet: { likes: req.user._id }, // _id added to array if not already there
+      $addToSet: { likes: req.user._id }, // add _id to the array if it's not there yet
     },
     { new: true },
   )
@@ -71,7 +67,7 @@ const dislikeItem = (req, res) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $pull: { likes: req.user._id } },
+    { $pull: { likes: req.user._id } }, // remove _id from the array
     { new: true },
   )
     .orFail()
