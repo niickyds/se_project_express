@@ -13,7 +13,13 @@ mongoose
 
 app.use(express.json());
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
+app.use((req, res, next) => {
+  req.user = {
+    _id: "65ce1d6d932064d3e16141ac", // paste the _id of the test user created in the previous step
+  };
+  next();
+});
 
 app.listen(PORT, () => {
-  console.log(`server workin ${PORT}`);
+  console.log(`server working ${PORT}`);
 });
