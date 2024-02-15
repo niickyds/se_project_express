@@ -1,6 +1,6 @@
 const User = require("../models/user");
 
-// GET /users
+// get users
 
 const getUsers = (req, res) => {
   User.find({})
@@ -10,6 +10,8 @@ const getUsers = (req, res) => {
       return res.status(500).send({ message: err.message }); // catch all error message (non-specific)
     });
 };
+
+// create user
 
 const createUser = (req, res) => {
   const { name, avatar } = req.body; // has the info that's sent in body of req
@@ -25,6 +27,8 @@ const createUser = (req, res) => {
       return res.status(500).send({ message: err.message });
     });
 };
+
+// get user by id
 
 const getUser = (res, req) => {
   const { userId } = req.params; // userId is loaded in params; not body (/routes/users)

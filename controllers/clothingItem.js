@@ -4,9 +4,10 @@ const createItem = (res, req) => {
   console.log(req);
   console.log(req.body);
 
+  const userId = req.user._id;
   const { name, weather, imageURL } = req.body;
 
-  ClothingItem.create({ name, weather, imageURL })
+  ClothingItem.create({ name, weather, imageURL, owner: userId })
     .then((item) => {
       console.log(item);
       res.send({ data: item });
@@ -21,7 +22,6 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch((evt) => {
-      console.log(evt);
       return res.status(500).send({ message: "Error from getItems", evt });
     });
 };
@@ -34,7 +34,6 @@ const updateItem = (req, res) => {
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
     .catch((evt) => {
-      console.log(evt);
       return res.status(500).send({ message: "Error from updateItem", evt });
     });
 };
@@ -47,9 +46,46 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => res.status(204).send({}))
     .catch((evt) => {
-      console.log(evt);
       return res.status(500).send({ message: "Error from deleteItem", evt });
     });
 };
 
-module.exports = { createItem, getItems, updateItem, deleteItem };
+const likeItem = (req, res) => {
+  const { itemId } = req.params;
+
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    {
+      $addToSet: { likes: req.user._id }, // _id added to array if not already there
+    },
+    { new: true },
+  )
+    .orFail()
+    .then((item) => res.send({ data: item }))
+    .catch((evt) => {
+      return res.status(500).send({ message: "Error from likeItem", evt });
+    });
+};
+
+const dislikeItem = (req, res) => {
+  const { itemId } = req.params;
+  ClothingItem.findByIdAndUpdate(
+    itemId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+    .orFail()
+    .then((item) => res.status(201).send({ data: item }))
+    .catch((evt) => {
+      return res.status(500).send({ message: "Error from dislikeItem", evt });
+    });
+};
+
+module.exports = {
+  createItem,
+  getItems,
+  updateItem,
+  deleteItem,
+  likeItem,
+  dislikeItem,
+};
