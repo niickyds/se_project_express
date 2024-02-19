@@ -30,10 +30,10 @@ const createUser = (req, res) => {
 
 // get user by id
 
-const getUser = (res, req) => {
-  // const { userId } = req.params; // userId is loaded in params; not body (/routes/users)
+const getUser = (req, res) => {
+  const { userId } = req.params; // userId is loaded in params; not body (/routes/users)
 
-  User.findById(req.user._id)
+  User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send(user))
     .catch((err) => {
