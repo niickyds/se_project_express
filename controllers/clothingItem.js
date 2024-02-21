@@ -1,7 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
+const ERROR_CODES = require("../utils/errors");
 
 const createItem = (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const { name, weather, imageURL } = req.body;
 
   ClothingItem.create({ name, weather, imageURL, owner: userId })
@@ -10,15 +11,19 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      return res.status(500).send({ message: err.message });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: err.message });
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.status(200).send(items))
+    .then((items) => res.send(items))
     .catch((evt) => {
-      return res.status(500).send({ message: "Error from getItems", evt });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Error from getItems", evt });
     });
 };
 
@@ -28,9 +33,11 @@ const updateItem = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageURL } })
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => res.send({ data: item }))
     .catch((evt) => {
-      return res.status(500).send({ message: "Error from updateItem", evt });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Error from updateItem", evt });
     });
 };
 
@@ -42,7 +49,9 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => res.status(204).send({}))
     .catch((evt) => {
-      return res.status(500).send({ message: "Error from deleteItem", evt });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Error from deleteItem", evt });
     });
 };
 
@@ -59,7 +68,9 @@ const likeItem = (req, res) => {
     .orFail()
     .then((item) => res.send({ data: item }))
     .catch((evt) => {
-      return res.status(500).send({ message: "Error from likeItem", evt });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Error from likeItem", evt });
     });
 };
 
@@ -73,7 +84,9 @@ const dislikeItem = (req, res) => {
     .orFail()
     .then((item) => res.status(201).send({ data: item }))
     .catch((evt) => {
-      return res.status(500).send({ message: "Error from dislikeItem", evt });
+      return res
+        .status(ERROR_CODES.SERVER_ERROR)
+        .send({ message: "Error from dislikeItem", evt });
     });
 };
 
