@@ -13,6 +13,11 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
+      if (err.name === "ValidationError") {
+        return res
+          .status(ERROR_CODES.INVALID_DATA)
+          .send({ message: err.message });
+      }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
         .send({ message: err.message });
@@ -45,15 +50,21 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params._id;
+  console.log(req.params._id);
 
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(204).send({}))
-    .catch((evt) => {
+    .then(() => res.status(200).send({ message: "Item successfully deleted" }))
+    .catch((err) => {
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.INVALID_DATA)
+          .send({ message: "Invalid Data" });
+      }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from deleteItem", evt });
+        .send({ message: "Error from deleteItem" });
     });
 };
 
@@ -69,10 +80,18 @@ const likeItem = (req, res) => {
   )
     .orFail()
     .then((item) => res.send({ data: item }))
-    .catch((evt) => {
+    .catch((err) => {
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.INVALID_DATA)
+          .send({ message: "Invalid Data" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+      }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from likeItem", evt });
+        .send({ message: "Error from likeItem" });
     });
 };
 
@@ -84,11 +103,19 @@ const dislikeItem = (req, res) => {
     { new: true },
   )
     .orFail()
-    .then((item) => res.status(201).send({ data: item }))
-    .catch((evt) => {
+    .then((item) => res.status(200).send({ data: item }))
+    .catch((err) => {
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR_CODES.INVALID_DATA)
+          .send({ message: "Invalid Data" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+      }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from dislikeItem", evt });
+        .send({ message: "Error from dislikeItem" });
     });
 };
 
