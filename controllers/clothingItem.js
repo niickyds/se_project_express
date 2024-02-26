@@ -4,8 +4,6 @@ const ERROR_CODES = require("../utils/errors");
 const createItem = (req, res) => {
   const userId = req.user._id;
   const { name, weather, imageUrl } = req.body;
-  console.log(req.body);
-  console.log(imageUrl);
 
   ClothingItem.create({ name, weather, imageUrl, owner: userId })
     .then((item) => {
@@ -49,10 +47,8 @@ const updateItem = (req, res) => {
 };
 
 const deleteItem = (req, res) => {
-  const { itemId } = req.params._id;
-  console.log(req.params._id);
+  const { itemId } = req.params;
 
-  console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then(() => res.status(200).send({ message: "Item successfully deleted" }))
@@ -61,6 +57,9 @@ const deleteItem = (req, res) => {
         return res
           .status(ERROR_CODES.INVALID_DATA)
           .send({ message: "Invalid Data" });
+      }
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
       }
       return res
         .status(ERROR_CODES.SERVER_ERROR)
