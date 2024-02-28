@@ -1,6 +1,8 @@
 # WTWR (What to Wear?): Back End
 
-The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
+This project ties into my previous WTWR (What to Wear?) as is functioning back-end. It can add, create, and like items posted. As well as create and display userson the site.
+
+I've implemented several new technologies such as a REST API, Server-Side Engineering with Node.js, and a new way to handle errors.
 
 ## Running the Project
 

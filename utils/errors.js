@@ -1,7 +1,5 @@
-const ERROR_CODES = {
-  INVALID_DATA: 400,
-  NOT_FOUND: 404,
-  SERVER_ERROR: 500,
-};
+const BadRequestError = 400;
+const NotFoundError = 404;
+const ServerError = 500;
 
-module.exports = ERROR_CODES;
+module.exports = { BadRequestError, NotFoundError, ServerError };

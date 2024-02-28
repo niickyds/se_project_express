@@ -1,5 +1,9 @@
 const ClothingItem = require("../models/clothingItem");
-const ERROR_CODES = require("../utils/errors");
+const {
+  BadRequestError,
+  NotFoundError,
+  ServerError,
+} = require("../utils/errors");
 
 const createItem = (req, res) => {
   const userId = req.user._id;
@@ -12,38 +16,22 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res
-          .status(ERROR_CODES.INVALID_DATA)
-          .send({ message: err.message });
+        return res.status(BadRequestError).send({ message: "Invalid Data" });
       }
       return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: err.message });
+        .status(ServerError)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch((evt) => {
-      return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from getItems", evt });
-    });
-};
-
-const updateItem = (req, res) => {
-  const { itemId } = req.params;
-  const { imageUrl } = req.body;
-
-  ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
-    .orFail()
-    .then((item) => res.send({ data: item }))
-    .catch((evt) => {
-      return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from updateItem", evt });
-    });
+    .catch(() =>
+      res
+        .status(ServerError)
+        .send({ message: "An error has occurred on the server." }),
+    );
 };
 
 const deleteItem = (req, res) => {
@@ -51,19 +39,17 @@ const deleteItem = (req, res) => {
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then(() => res.status(200).send({ message: "Item successfully deleted" }))
+    .then(() => res.send({ message: "Item successfully deleted" }))
     .catch((err) => {
       if (err.name === "CastError") {
-        return res
-          .status(ERROR_CODES.INVALID_DATA)
-          .send({ message: "Invalid Data" });
+        return res.status(BadRequestError).send({ message: "Invalid Data" });
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+        return res.status(NotFoundError).send({ message: "Not Found" });
       }
       return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from deleteItem" });
+        .status(ServerError)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -81,16 +67,14 @@ const likeItem = (req, res) => {
     .then((item) => res.send({ data: item }))
     .catch((err) => {
       if (err.name === "CastError") {
-        return res
-          .status(ERROR_CODES.INVALID_DATA)
-          .send({ message: "Invalid Data" });
+        return res.status(BadRequestError).send({ message: "Invalid Data" });
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+        return res.status(NotFoundError).send({ message: "Not Found" });
       }
       return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from likeItem" });
+        .status(ServerError)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -102,26 +86,23 @@ const dislikeItem = (req, res) => {
     { new: true },
   )
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => res.send({ data: item }))
     .catch((err) => {
       if (err.name === "CastError") {
-        return res
-          .status(ERROR_CODES.INVALID_DATA)
-          .send({ message: "Invalid Data" });
+        return res.status(BadRequestError).send({ message: "Invalid Data" });
       }
       if (err.name === "DocumentNotFoundError") {
-        return res.status(ERROR_CODES.NOT_FOUND).send({ message: err.message });
+        return res.status(NotFoundError).send({ message: "Not Found" });
       }
       return res
-        .status(ERROR_CODES.SERVER_ERROR)
-        .send({ message: "Error from dislikeItem" });
+        .status(ServerError)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
 module.exports = {
   createItem,
   getItems,
-  updateItem,
   deleteItem,
   likeItem,
   dislikeItem,

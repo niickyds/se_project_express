@@ -1,6 +1,8 @@
 const express = require("express");
+
 const app = express();
 const mongoose = require("mongoose");
+
 const { PORT = 3001 } = process.env;
 const mainRouter = require("./routes/index");
 
@@ -21,7 +23,6 @@ mongoose
   .catch(console.error);
 
 app.use(express.json());
-app.use(routes);
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
 
 app.listen(PORT, () => {
