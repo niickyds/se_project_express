@@ -3,6 +3,7 @@ const {
   BadRequestError,
   NotFoundError,
   ServerError,
+  ForbiddenError,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
@@ -37,9 +38,18 @@ const getItems = (req, res) => {
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
-  ClothingItem.findByIdAndDelete(itemId)
+  ClothingItem.findById(itemId)
     .orFail()
-    .then(() => res.send({ message: "Item successfully deleted" }))
+    .then((item) => {
+      if (!item.owner.equals(req.user._id)) {
+        return res
+          .status(ForbiddenError)
+          .send({ message: "Prohibited Request" });
+      }
+      return ClothingItem.findByIdAndDelete(itemId).then((user) =>
+        res.send(user),
+      );
+    })
     .catch((err) => {
       if (err.name === "CastError") {
         return res.status(BadRequestError).send({ message: "Invalid Data" });
