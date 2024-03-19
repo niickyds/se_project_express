@@ -25,12 +25,11 @@ const createUser = (req, res) => {
       })
       .catch((err) => {
         console.error(err);
-        // catch if validation fails (ex. name requires 2 => put 1)
-        if (err.name === "ValidationError") {
-          return res.status(BadRequestError).send({ message: "Invalid data" });
-        }
         if (err.code === 11000) {
           return res.status(ConflictError).send({ message: "Duplicate user" });
+        }
+        if (err.name === "ValidationError") {
+          return res.status(BadRequestError).send({ message: "Invalid data" });
         }
         return res
           .status(ServerError)
@@ -44,7 +43,7 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
