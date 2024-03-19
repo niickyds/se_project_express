@@ -44,11 +44,11 @@ const deleteItem = (req, res) => {
       if (!item.owner.equals(req.user._id)) {
         return res
           .status(ForbiddenError)
-          .send({ message: "Prohibited Request" });
+          .send({ message: "Unauthorized Request" });
       }
-      return ClothingItem.findByIdAndDelete(itemId).then((user) =>
-        res.send(user),
-      );
+      return item.findByIdAndRemove(req.params.itemId).then((user) => {
+        res.send(user);
+      });
     })
     .catch((err) => {
       if (err.name === "CastError") {
