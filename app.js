@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { PORT = 3001 } = process.env;
 const mainRouter = require("./routes/index");
 const cors = require("cors");
+require("dotenv").config();
 
 app.use(express.json());
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
