@@ -5,7 +5,7 @@ const { UnauthorizedError } = require("../utils/errors");
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {
-    console.error("Authorization header is missing");
+    console.error("Authorization header is missing", authorization);
     return res.status(UnauthorizedError).send({ message: "User Unauthorized" });
   }
 
