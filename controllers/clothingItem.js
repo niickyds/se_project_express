@@ -46,11 +46,12 @@ const deleteItem = (req, res) => {
           .status(ForbiddenError)
           .send({ message: "Unauthorized Request" });
       }
-      return item.findByIdAndRemove(req.params.itemId).then((user) => {
+      return item.deleteOne(req.params.itemId).then((user) => {
         res.send(user);
       });
     })
     .catch((err) => {
+      console.log(err);
       if (err.name === "CastError") {
         return res.status(BadRequestError).send({ message: "Invalid Data" });
       }

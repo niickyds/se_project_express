@@ -12,7 +12,7 @@ router.get("/", getItems);
 
 router.post("/", auth, createItem);
 
-router.delete("/:itemId", deleteItem);
+router.delete("/:itemId", auth, deleteItem);
 
 router.put("/:itemId/likes", auth, likeItem);
 

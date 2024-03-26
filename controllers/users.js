@@ -43,6 +43,9 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(BadRequestError).send({ message: "Invalid data" });
+  }
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -52,14 +55,6 @@ const login = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      if (!email || !password) {
-        return res.status(BadRequestError).send({ message: "Invalid data" });
-      }
-      if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NotFoundError)
-          .send({ message: "Cannot find user with that id" });
-      }
       if (err.message === "Incorrect email or password") {
         return res
           .status(UnauthorizedError)
@@ -106,6 +101,7 @@ const updateUserData = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true },
   )
+    .orFail()
     .then((user) => {
       res.send(user);
     })
