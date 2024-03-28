@@ -46,7 +46,7 @@ const deleteItem = (req, res) => {
           .status(ForbiddenError)
           .send({ message: "Unauthorized Request" });
       }
-      return item.deleteOne(req.params.itemId).then((user) => {
+      return item.deleteOne().then((user) => {
         res.send(user);
       });
     })
