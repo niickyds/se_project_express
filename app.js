@@ -8,9 +8,9 @@ const cors = require("cors");
 const mainRouter = require("./routes/index");
 require("dotenv").config();
 
+app.use(cors());
 app.use(express.json());
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
-app.use(cors());
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/wtwr_db")
