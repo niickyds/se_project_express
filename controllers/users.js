@@ -30,10 +30,9 @@ const createUser = (req, res) => {
         }
         if (err.name === "ValidationError") {
           return res.status(BadRequestError).send({ message: "Invalid data" });
+        } else {
+          next(err);
         }
-        return res
-          .status(ServerError)
-          .send({ message: "An error has occurred on the server." });
       });
   });
 };
@@ -59,10 +58,9 @@ const login = (req, res) => {
         return res
           .status(UnauthorizedError)
           .send({ message: "User data not found" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -86,10 +84,9 @@ const getCurrentUser = (req, res) => {
         return res
           .status(NotFoundError)
           .send({ message: "Cannot find user with that id" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -112,10 +109,9 @@ const updateUserData = (req, res) => {
       }
       if (err.name === "ValidationError") {
         return res.status(BadRequestError).send({ message: "Invalid data" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 

@@ -18,21 +18,16 @@ const createItem = (req, res) => {
       console.log(err);
       if (err.name === "ValidationError") {
         return res.status(BadRequestError).send({ message: "Invalid Data" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch(() =>
-      res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." }),
-    );
+    .catch(() => next(err));
 };
 
 const deleteItem = (req, res) => {
@@ -57,10 +52,9 @@ const deleteItem = (req, res) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return res.status(NotFoundError).send({ message: "Not Found" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -82,10 +76,9 @@ const likeItem = (req, res) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return res.status(NotFoundError).send({ message: "Not Found" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -104,10 +97,9 @@ const dislikeItem = (req, res) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return res.status(NotFoundError).send({ message: "Not Found" });
+      } else {
+        next(err);
       }
-      return res
-        .status(ServerError)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
