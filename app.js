@@ -7,10 +7,16 @@ const cors = require("cors");
 const mainRouter = require("./routes/index");
 const { errorHandler } = require("./middlewares/errorHandler.js");
 const { errors } = require("celebrate");
+const { requestLogger, errorLogger } = require("./middlewares/logger.js");
+
+app.use(requestLogger);
 
 app.use(cors());
 app.use(express.json());
 app.use("/", mainRouter); // from index.js; acts as baseline route for routes/users.js
+
+app.use(errorLogger);
+
 app.use(errors());
 app.use(errorHandler);
 
