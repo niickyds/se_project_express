@@ -23,6 +23,9 @@ app.use("/", mainRouter);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
+app.get("/test", (req, res) => {
+  res.send("Test route working");
+});
 
 app.listen(PORT, () => {
   console.log(`server working ${PORT}`);
