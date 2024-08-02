@@ -15,6 +15,7 @@ router.use("/items", clothingItem);
 // });
 
 router.use((req, res, next) => {
+  console.log(req);
   next(new NotFoundError("Router not found"));
   // res.status(NotFoundError).send({ message: "Router not found" });
 });
