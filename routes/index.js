@@ -14,8 +14,9 @@ router.use("/items", clothingItem);
 //   res.status(404).json({ message: "Router not found" });
 // });
 
-router.use((req, res) => {
-  res.status(NotFoundError).send({ message: "Router not foundSADEFSDFSDF" });
+router.use((req, res, next) => {
+  next(new NotFoundError("Router not found"));
+  // res.status(NotFoundError).send({ message: "Router not found" });
 });
 
 module.exports = router;
