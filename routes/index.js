@@ -7,7 +7,9 @@ const {
   validateReturningUser,
   validateNewUser,
 } = require("../middlewares/validation");
+const { auth } = require("../middlewares/auth");
 
+router.use(auth);
 router.post("/signin", validateReturningUser, login);
 router.post("/signup", validateNewUser, createUser);
 router.use("/users", userRouter);

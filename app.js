@@ -22,14 +22,10 @@ app.use(cors());
 app.use(requestLogger);
 app.use("/", mainRouter);
 
-app.get("/test", (req, res) => {
-  res.send("Test route working");
-});
-
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`server working ${PORT}`);
 });
