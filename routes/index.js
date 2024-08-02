@@ -10,7 +10,7 @@ router.post("/signup", createUser);
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
 
-router.use("/", signRouter);
+router.use("/");
 
 // router.use((req, res) => {
 //   console.log("Default route hit");
