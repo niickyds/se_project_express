@@ -8,14 +8,13 @@ const {
   validateNewUser,
 } = require("../middlewares/validation");
 // const signRouter = require("./sign");
-const { getItems } = require("../controllers/clothingItem");
+// const { getItems } = require("../controllers/clothingItem");
+router.use("/", createUser);
 
 router.post("/signin", validateReturningUser, login);
 router.post("/signup", validateNewUser, createUser);
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
-
-// router.use("/", getItems);
 
 // router.use((req, res) => {
 //   console.log("Default route hit");
