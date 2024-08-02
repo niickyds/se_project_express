@@ -3,15 +3,19 @@ const clothingItem = require("./clothingItem");
 const userRouter = require("./users");
 const NotFoundError = require("../errors/NotFoundError");
 const { login, createUser } = require("../controllers/users");
-const signRouter = require("./sign");
+const {
+  validateReturningUser,
+  validateNewUser,
+} = require("../middlewares/validation");
+// const signRouter = require("./sign");
 const { getItems } = require("../controllers/clothingItem");
 
-router.post("/signin", login);
-router.post("/signup", createUser);
+router.post("/signin", validateReturningUser, login);
+router.post("/signup", validateNewUser, createUser);
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
 
-router.use("/", getItems);
+// router.use("/", getItems);
 
 // router.use((req, res) => {
 //   console.log("Default route hit");
