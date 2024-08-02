@@ -4,13 +4,14 @@ const userRouter = require("./users");
 const NotFoundError = require("../errors/NotFoundError");
 const { login, createUser } = require("../controllers/users");
 const signRouter = require("./sign");
+const { getItems } = require("../controllers/clothingItem");
 
 router.post("/signin", login);
 router.post("/signup", createUser);
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
 
-router.use("/");
+router.use("/", getItems);
 
 // router.use((req, res) => {
 //   console.log("Default route hit");
