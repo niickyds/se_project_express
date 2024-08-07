@@ -4,10 +4,6 @@ const userRouter = require("./users");
 const NotFoundError = require("../errors/NotFoundError");
 const { login, createUser } = require("../controllers/users");
 const { auth } = require("../middlewares/auth");
-// const {
-//   validateReturningUser,
-//   validateNewUser,
-// } = require("../middlewares/validation");
 
 router.post("/signin", login);
 router.post("/signup", createUser);

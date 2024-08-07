@@ -1,6 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(res);
-  console.log(req);
   console.error(err);
 
   const { statusCode = 500, message } = err;
