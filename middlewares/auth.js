@@ -3,13 +3,16 @@ const { JWT_SECRET } = require("../utils/config");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 
 const auth = (req, res, next) => {
+  console.log("auth test");
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith("Bearer ")) {
+  console.log(authorization);
+
+  if (!authorization || !authorization.startsWith("Bearer")) {
     console.error("Authorization header is missing", authorization);
     return next(new UnauthorizedError("Authorization Required"));
   }
 
-  const token = authorization.replace("Bearer ", "");
+  const token = authorization.replace("Bearer", "");
   let payload;
 
   try {
@@ -18,6 +21,7 @@ const auth = (req, res, next) => {
     return next(new UnauthorizedError("Authorization Required"));
   }
 
+  console.log(payload);
   req.user = payload;
   return next();
 };
