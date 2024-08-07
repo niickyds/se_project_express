@@ -1,7 +1,7 @@
 const errorHandler = (err, req, res, next) => {
-  console.error(err);
   console.log(res);
   console.log(req);
+  console.error(err);
 
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
