@@ -13,7 +13,6 @@ router.post("/signin", login);
 router.post("/signup", createUser);
 router.use("/users", userRouter);
 router.use("/items", clothingItem);
-router.use("/");
 
 router.use((req, res, next) => {
   console.log(req);
