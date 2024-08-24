@@ -1,8 +1,10 @@
 # WTWR (What to Wear?): Back End
 
-This project ties into my previous WTWR (What to Wear?) as is functioning back-end. It can add, create, and like items posted. As well as create and display userson the site.
+This project ties into my frontend WTWR (What to Wear?) as its functioning back-end. It can add, create, and like items posted. As well as create and display userson the site.
 
-I've implemented several new technologies such as a REST API, Server-Side Engineering with Node.js, and a new way to handle errors.
+## Website
+
+wtwr.geobattery.com - www.wtwr.geobattery.com - api.wtwr.geobattery.com
 
 ## Running the Project
 

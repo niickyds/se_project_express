@@ -12,24 +12,21 @@ const {
 
 // Create User
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body; // has the info that's sent in body of req
 
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ name, avatar, email, password: hash })
       .then((user) => {
         res.send({ name: user.name, avatar: user.avatar, email: user.email });
-        if (!email) {
-          throw new Error({ message: "Duplicate email" });
-        }
       })
       .catch((err) => {
         console.error(err);
         if (err.code === 11000) {
-          return res.status(ConflictError).send({ message: "Duplicate user" });
+          return next(new ConflictError("Duplicate user"));
         }
         if (err.name === "ValidationError") {
-          return res.status(BadRequestError).send({ message: "Invalid data" });
+          return next(new BadRequestError("Invalid data"));
         } else {
           next(err);
         }
@@ -39,7 +36,7 @@ const createUser = (req, res) => {
 
 // Login
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -66,7 +63,7 @@ const login = (req, res) => {
 
 // Get Current User
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
 
   User.findById(userId)
@@ -90,7 +87,7 @@ const getCurrentUser = (req, res) => {
     });
 };
 
-const updateUserData = (req, res) => {
+const updateUserData = (req, res, next) => {
   const { name, avatar } = req.body;
 
   User.findOneAndUpdate(
