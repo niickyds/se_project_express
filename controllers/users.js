@@ -5,7 +5,6 @@ const User = require("../models/user");
 const {
   BadRequestError,
   NotFoundError,
-  ServerError,
   ConflictError,
   UnauthorizedError,
 } = require("../utils/errors");
@@ -52,9 +51,7 @@ const login = (req, res, next) => {
     .catch((err) => {
       console.log(err);
       if (err.message === "Incorrect email or password") {
-        return res
-          .status(UnauthorizedError)
-          .send({ message: "User data not found" });
+        return next(new UnauthorizedError("User data not found"));
       } else {
         next(err);
       }
@@ -75,12 +72,10 @@ const getCurrentUser = (req, res, next) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "CastError") {
-        return res.status(BadRequestError).send({ message: "Invalid data" });
+        return next(new BadRequestError("Invalid data"));
       }
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NotFoundError)
-          .send({ message: "Cannot find user with that id" });
+        return next(new NotFoundError("Cannot find user with that id"));
       } else {
         next(err);
       }
@@ -102,10 +97,10 @@ const updateUserData = (req, res, next) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NotFoundError).send({ message: "Cannot find user" });
+        return next(new NotFoundError("Cannot find user with that id"));
       }
       if (err.name === "ValidationError") {
-        return res.status(BadRequestError).send({ message: "Invalid data" });
+        return next(new BadRequestError("Invalid data"));
       } else {
         next(err);
       }
