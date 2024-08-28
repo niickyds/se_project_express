@@ -1,9 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} = require("../utils/errors");
+const BadRequestError = require("../errors/BadRequestError");
+const ForbiddenError = require("../errors/ForbiddenError");
+const NotFoundError = require("../errors/NotFoundError");
 
 const createItem = (req, res, next) => {
   const userId = req.user._id;
@@ -14,7 +12,7 @@ const createItem = (req, res, next) => {
       res.send({ data: item });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "ValidationError") {
         next(new BadRequestError("Invalid data"));
       } else {
@@ -26,7 +24,7 @@ const createItem = (req, res, next) => {
 const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch(() => next(err));
+    .catch(next);
 };
 
 const deleteItem = (req, res, next) => {
@@ -43,15 +41,14 @@ const deleteItem = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "CastError") {
         next(new BadRequestError("Invalid data"));
       }
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Not Found"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -73,9 +70,8 @@ const likeItem = (req, res, next) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Not Found"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -94,9 +90,8 @@ const dislikeItem = (req, res, next) => {
       }
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Not Found"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 

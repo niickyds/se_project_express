@@ -22,7 +22,7 @@ module.exports.validateItemCreate = celebrate({
       "string.uri": 'the "imageUrl" field must be a valid url',
     }),
 
-    weather: Joi.string().valid("hot, warm, cold").required().messages({
+    weather: Joi.string().valid("hot", "warm", "cold").required().messages({
       "string.empty": 'The "weather" field must be filled in',
     }),
   }),
@@ -37,7 +37,7 @@ module.exports.validateNewUser = celebrate({
       "string.empty": 'The "name" field must be filled in',
     }),
 
-    avatarUrl: Joi.string().required().custom(validateURL).messages({
+    avatar: Joi.string().required().custom(validateURL).messages({
       "string.empty": 'The "avatar" field must be filled in',
       "string.uri": 'The "avatar" field must have a valid url',
     }),

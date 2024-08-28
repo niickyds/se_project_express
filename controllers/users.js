@@ -2,12 +2,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 const User = require("../models/user");
-const {
-  BadRequestError,
-  NotFoundError,
-  ConflictError,
-  UnauthorizedError,
-} = require("../utils/errors");
+const BadRequestError = require("../errors/BadRequestError");
+const ConflictError = require("../errors/ConflictError");
+const NotFoundError = require("../errors/NotFoundError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
 
 // Create User
 
@@ -26,9 +24,8 @@ const createUser = (req, res, next) => {
         }
         if (err.name === "ValidationError") {
           return next(new BadRequestError("Invalid data"));
-        } else {
-          next(err);
         }
+        return next(err);
       });
   });
 };
@@ -49,12 +46,11 @@ const login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.message === "Incorrect email or password") {
         return next(new UnauthorizedError("User data not found"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -70,15 +66,14 @@ const getCurrentUser = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "CastError") {
         return next(new BadRequestError("Invalid data"));
       }
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Cannot find user with that id"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -95,15 +90,14 @@ const updateUserData = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       if (err.name === "DocumentNotFoundError") {
         return next(new NotFoundError("Cannot find user with that id"));
       }
       if (err.name === "ValidationError") {
         return next(new BadRequestError("Invalid data"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
